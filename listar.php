@@ -1,18 +1,19 @@
 <?php
+// Configurações de Conexão com o Banco de Dados
 $servidor = "localhost";
 $usuario = "root";
 $senha = ""; 
 $banco = "livraria";
 
-// 2. Criar a conexão com o MySQL
+// Criar a conexão com o MySQL
 $conexao = new mysqli($servidor, $usuario, $senha, $banco);
 
-// 3. Verificar se a conexão falhou
+// Verificar se a conexão falhou
 if ($conexao->connect_error) {
     die("Falha na conexão: " . $conexao->connect_error);
 }
 
-// 4. Busca os livros no banco de dados para aparecer na tabela
+// Busca os livros no banco de dados
 $sql = "SELECT * FROM livros";
 $resultado = $conexao->query($sql);
 ?>
@@ -30,9 +31,10 @@ $resultado = $conexao->query($sql);
     <a href="index.html"><button>+ Registar Novo Livro</button></a>
     <br><br>
 
-    <table border="1">
+    <table>
         <thead>
             <tr>
+                <th>ID</th>
                 <th>Título</th>
                 <th>Autor</th>
                 <th>Preço</th>
@@ -42,12 +44,15 @@ $resultado = $conexao->query($sql);
         </thead>
         <tbody>
             <?php
-            foreach ($livros as $livro) { 
+            // Verifica se tem livros cadastrados no banco
+            if ($resultado->num_rows > 0) {
+                // Faz o loop (while) pegando direto do banco de dados
+                while($livro = $resultado->fetch_assoc()) { 
             ?>
                 <tr>
                     <td><?php echo $livro['id']; ?></td>
-                    <td><?php echo $livro['titulo']; ?></td>
-                    <td><?php echo $livro['autor']; ?></td>
+                    <td><?php echo htmlspecialchars($livro['titulo']); ?></td>
+                    <td><?php echo htmlspecialchars($livro['autor']); ?></td>
                     <td>R$ <?php echo number_format($livro['preco'], 2, ',', '.'); ?></td>
                     <td><?php echo $livro['quantidade']; ?></td>
                     <td>
@@ -56,7 +61,13 @@ $resultado = $conexao->query($sql);
                     </td>
                 </tr>
             <?php 
+                }
+            } else {
+                echo "<tr><td colspan='6'>Nenhum livro cadastrado ainda.</td></tr>";
             }
+            
+            // Fecha a conexão
+            $conexao->close(); 
             ?>
         </tbody>
     </table>
