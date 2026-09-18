@@ -1,8 +1,20 @@
 <?php
-$livros = [
-    ["id" => 1, "titulo" => "O Alquimista", "autor" => "Paulo Coelho", "preco" => 29.90, "quantidade" => 10],
-    ["id" => 2, "titulo" => "Dom Casmurro", "autor" => "Machado de Assis", "preco" => 19.90, "quantidade" => 5]
-];
+$servidor = "localhost";
+$usuario = "root";
+$senha = ""; 
+$banco = "livraria";
+
+// 2. Criar a conexão com o MySQL
+$conexao = new mysqli($servidor, $usuario, $senha, $banco);
+
+// 3. Verificar se a conexão falhou
+if ($conexao->connect_error) {
+    die("Falha na conexão: " . $conexao->connect_error);
+}
+
+// 4. Busca os livros no banco de dados para aparecer na tabela
+$sql = "SELECT * FROM livros";
+$resultado = $conexao->query($sql);
 ?>
 
 <!DOCTYPE html>
