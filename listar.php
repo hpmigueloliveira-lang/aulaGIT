@@ -56,8 +56,12 @@ $resultado = $conexao->query($sql);
                     <td>R$ <?php echo number_format($livro['preco'], 2, ',', '.'); ?></td>
                     <td><?php echo $livro['quantidade']; ?></td>
                     <td>
-                        <button>Editar</button>
-                        <button style="background-color: #e74c3c;">Excluir</button>
+                        <a href="editar.php?id=<?php echo $livro['id']; ?>">
+                            <button>Editar</button>
+                        </a>
+                        <a href="excluir.php?id=<?php echo $livro['id']; ?>" onclick="return confirm('Tem a certeza que deseja apagar este livro?');">
+                            <button type="button" style="background-color: #e74c3c;">Excluir</button>
+                        </a>
                     </td>
                 </tr>
             <?php 
